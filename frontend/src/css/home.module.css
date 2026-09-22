@@ -1,0 +1,14 @@
+:root {
+  --color-ink: #130B1E;
+  --color-ink-2: #1C1329;
+  --color-cream: #F4EFE6;
+  --color-cream-2: #EAE3D6;
+  --color-pink: #F04B9A;
+  --color-pink-soft: #FF66B2;
+  --color-teal: #35D6C4;
+  --color-mute: #9A8FA8;
+
+  --font-display: 'Archivo Expanded', 'Archivo', sans-serif;
+  --font-sans: 'Archivo', system-ui, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}

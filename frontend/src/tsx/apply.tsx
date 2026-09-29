@@ -88,7 +88,7 @@ export default function Apply({ onBack }: ApplyProps) {
     setError(null);
 
     try {
-      const res = await fetch("https://formspree.io/f/xdekylyy", {
+      const res = await fetch("https://formspree.io/f/mnpnlbez", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

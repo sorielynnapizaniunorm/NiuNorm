@@ -271,17 +271,21 @@ export default function Apply({ onBack }: ApplyProps) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/api/applications", {
+      const res = await fetch("https://formspree.io/f/mnpnlbez", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
-          brand_name: fields.brandName,
-          contact_name: fields.contactName,
+          _subject: `New application: ${fields.brandName}`,
+          brandName: fields.brandName,
+          contactName: fields.contactName,
           email: fields.email,
-          tiktok_handle: fields.tiktokHandle,
-          monthly_gmv: fields.monthlyGmv,
+          tiktokHandle: fields.tiktokHandle,
+          monthlyGmv: fields.monthlyGmv,
           category: fields.category,
-          services: fields.services,
+          services: fields.services.join(", "),
           referral: fields.referral,
           message: fields.message,
         }),

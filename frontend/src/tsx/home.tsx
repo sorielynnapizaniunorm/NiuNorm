@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/NiunormLogo.png";
 import heroBg from "../assets/hero-bg-2.jpg";
 import Apply from "./apply";
@@ -502,27 +502,48 @@ function Footer() {
 }
 
 export default function App() {
-  const [showApply, setShowApply] = useState(false);
+  const [showApply, setShowApply] = useState(() => window.location.hash === "#apply");
+
+  useEffect(() => {
+    const syncApplyView = () => setShowApply(window.location.hash === "#apply");
+
+    window.addEventListener("hashchange", syncApplyView);
+    window.addEventListener("popstate", syncApplyView);
+    return () => {
+      window.removeEventListener("hashchange", syncApplyView);
+      window.removeEventListener("popstate", syncApplyView);
+    };
+  }, []);
+
+  function openApply() {
+    window.history.pushState(null, "", "#apply");
+    setShowApply(true);
+  }
+
+  function closeApply() {
+    window.history.pushState(null, "", `${window.location.pathname}${window.location.search}`);
+    setShowApply(false);
+  }
 
   if (showApply) {
     return (
       <div className="min-h-screen bg-ink text-cream">
-        <Nav onApply={() => setShowApply(false)} />
-        <Apply onBack={() => setShowApply(false)} />
+        <Nav onApply={closeApply} />
+        <Apply onBack={closeApply} />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-ink text-cream">
-      <Nav onApply={() => setShowApply(true)} />
-      <Hero onApply={() => setShowApply(true)} />
+      <Nav onApply={openApply} />
+      <Hero onApply={openApply} />
       <Marquee />
       <Pillars />
       <Stats />
       <Trust />
       <Niunies />
-      <CTA onApply={() => setShowApply(true)} />
+      <CTA onApply={openApply} />
       <Footer />
     </div>
   );

@@ -1,0 +1,384 @@
+﻿/* Home page styles. Class and keyframe names stay global so Home.tsx can use them as plain strings. */
+.page {
+  display: contents;
+}
+
+:global(.marquee-track) {
+  animation: marquee 28s linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Rising hearts on the LIVE phone mockup */
+:global(.live-heart) {
+  animation: live-heart 3.6s ease-out infinite;
+  opacity: 0;
+}
+@keyframes live-heart {
+  0% { transform: translateY(0) scale(0.7); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translateY(-9rem) scale(1.1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(.live-heart) { animation: none; opacity: 0.8; }
+}
+
+/* Pink strike-through draws across "Posting." on load */
+:global(.strike-line) {
+  transform-origin: left;
+  animation: strike-draw 0.7s cubic-bezier(0.7, 0, 0.2, 1) 0.4s both;
+}
+@keyframes strike-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Gentle idle float for the LIVE phone */
+:global(.phone-float) { animation: phone-float 6s ease-in-out infinite; }
+@keyframes phone-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+/* Affiliate network: pulses flowing from creators into the shop */
+:global(.flow-line) {
+  stroke-dasharray: 8 192;
+  stroke-dashoffset: 8;
+  animation: flow-in 3s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+/* Pulse travels for the first 45% of the cycle, then rests */
+@keyframes flow-in {
+  0% { stroke-dashoffset: 8; }
+  45%, 100% { stroke-dashoffset: -100; }
+}
+/* "+â‚±" sale pops out of the shop as the pulse lands, floats up, fades */
+:global(.sale-pop) {
+  opacity: 0;
+  animation: sale-pop 4.5s ease-out infinite;
+}
+@keyframes sale-pop {
+  0%, 42% { opacity: 0; transform: translateY(10px) scale(0.6); }
+  48% { opacity: 1; transform: translateY(0) scale(1.05); }
+  52% { transform: translateY(-2px) scale(1); }
+  72% { opacity: 1; }
+  82%, 100% { opacity: 0; transform: translateY(-34px) scale(0.95); }
+}
+/* Gentle bob for creator avatars */
+:global(.avatar-float) { animation: avatar-float 5s ease-in-out infinite; }
+@keyframes avatar-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+/* GMV number flashes teal each time it climbs */
+:global(.gmv-flash) { animation: gmv-flash 0.7s ease-out; }
+@keyframes gmv-flash {
+  from { color: #35D6C4; text-shadow: 0 0 12px rgba(53, 214, 196, 0.7); }
+  to { color: inherit; text-shadow: none; }
+}
+:global(.pulse-ring) { animation: pulse-ring 3s ease-out infinite; }
+@keyframes pulse-ring {
+  from { transform: scale(1); opacity: 0.8; }
+  to { transform: scale(1.7); opacity: 0; }
+}
+
+/* GMV Max card */
+:global(.bar-shimmer) {
+  left: -40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: bar-shimmer 2.4s ease-in-out infinite;
+}
+@keyframes bar-shimmer {
+  from { left: -40%; }
+  to { left: 110%; }
+}
+/* Scanner sweeps top â†’ bottom across the ad rows during "Learn" */
+:global(.ads-scan) { animation: ads-scan 2.2s ease-in-out forwards; }
+@keyframes ads-scan {
+  from { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  to { top: calc(100% + 2.5rem); opacity: 0; }
+}
+/* Active step's progress bar fills over the phase duration */
+:global(.phase-fill) { animation: phase-fill 2s linear forwards; }
+@keyframes phase-fill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+/* Phase title / pill swap in */
+:global(.phase-title) { animation: phase-title 0.45s ease-out; }
+@keyframes phase-title {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+:global(.scale-pill) { animation: scale-pill 2.4s ease-in-out infinite; }
+@keyframes scale-pill {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 185, 79, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(245, 185, 79, 0); }
+}
+
+/* Content Production cards */
+:global(.content-float) { animation: content-float 6s ease-in-out infinite; }
+@keyframes content-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+:global(.content-progress) { animation: content-progress 3.4s linear forwards; }
+@keyframes content-progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+:global(.disc-spin) { animation: disc-spin 5s linear infinite; }
+@keyframes disc-spin {
+  to { transform: rotate(360deg); }
+}
+:global(.content-heart) {
+  opacity: 0;
+  animation: content-heart 2.1s ease-out infinite;
+}
+@keyframes content-heart {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(-6px, -60px) scale(1.15); opacity: 0; }
+}
+
+:global(.ret-burst) { opacity: 0; animation: ret-burst 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+@keyframes ret-burst {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); opacity: 0; }
+}
+:global(.ret-shock) { opacity: 0; animation: ret-shock 0.9s ease-out forwards; }
+@keyframes ret-shock {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+:global(.ret-pop) { animation: ret-pop 0.4s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes ret-pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+:global(.fly-pulse) { transform-box: fill-box; transform-origin: center; animation: fly-pulse 2.8s ease-out infinite; }
+@keyframes fly-pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.45); opacity: 0; }
+}
+
+:global(.fly-spoke) { stroke-dasharray: 0.28 1.4; stroke-dashoffset: 0.28; animation: fly-spoke 0.7s ease-in forwards; }
+@keyframes fly-spoke { to { stroke-dashoffset: -1.05; } }
+:global(.fly-bump) { transform-box: fill-box; transform-origin: center; animation: fly-bump 0.6s ease-out 0.55s; }
+@keyframes fly-bump {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.07); }
+}
+:global(.fly-core-ring) { opacity: 0; animation: fly-core-ring 0.8s ease-out 0.55s; }
+@keyframes fly-core-ring {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+:global(.fly-ripple) { transform-box: fill-box; transform-origin: center; animation: fly-ripple 0.9s ease-out forwards; }
+@keyframes fly-ripple {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(3); opacity: 0; }
+}
+:global(.fly-num) { animation: fly-num 0.6s ease-out 0.55s backwards; }
+@keyframes fly-num {
+  0% { fill: #35D6C4; }
+  100% { fill: #F4EFE6; }
+}
+
+:global(.pain-flicker) { animation: pain-flicker 1.2s steps(1, end) infinite; }
+@keyframes pain-flicker {
+  0%, 100% { opacity: 1; }
+  20% { opacity: 0.35; }
+  28% { opacity: 1; }
+  62% { opacity: 0.55; }
+  68% { opacity: 1; }
+}
+:global(.pain-glow) { animation: pain-glow 1.6s ease-in-out infinite; }
+@keyframes pain-glow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.5; }
+}
+
+:global(.pain-ping) { transform-box: fill-box; transform-origin: center; animation: pain-ping 2.4s ease-out infinite; }
+@keyframes pain-ping {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(3.4); opacity: 0; }
+}
+:global(.pain-drip) { transform-box: fill-box; transform-origin: center; opacity: 0; animation: pain-drip 1.05s ease-in infinite; }
+@keyframes pain-drip {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(22px) scale(0.4); opacity: 0; }
+}
+:global(.pain-scanline) { animation: pain-scanline 4s linear infinite; }
+@keyframes pain-scanline {
+  from { top: -4rem; }
+  to { top: 100%; }
+}
+:global(.pain-glitch) { animation: pain-glitch 0.5s steps(2, end); }
+@keyframes pain-glitch {
+  0% { transform: translateX(-3px); text-shadow: 3px 0 #35D6C4, -3px 0 #F5B94F; opacity: 0.4; }
+  30% { transform: translateX(2px); text-shadow: -2px 0 #35D6C4, 2px 0 #F5B94F; opacity: 1; }
+  60% { transform: translateX(-1px); text-shadow: 1px 0 #35D6C4; }
+  100% { transform: none; text-shadow: none; }
+}
+:global(.pain-count) { animation: pain-count 0.7s ease-out; }
+@keyframes pain-count {
+  from { color: #F04B9A; text-shadow: 0 0 14px rgba(240, 75, 154, 0.8); }
+  to { color: inherit; text-shadow: none; }
+}
+:global(.pain-caret) { animation: pain-caret 0.9s steps(1, end) infinite; }
+@keyframes pain-caret {
+  50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.content-float), :global(.content-heart), :global(.disc-spin) { animation: none; }
+  :global(.content-heart) { display: none; }
+  :global(.content-progress) { animation: none; width: 100%; }
+  :global(.bar-shimmer), :global(.scale-pill), :global(.ads-scan), :global(.phase-fill), :global(.phase-title) { animation: none; }
+  :global(.phase-fill) { width: 100%; }
+  :global(.flow-line), :global(.pulse-ring), :global(.avatar-float), :global(.gmv-flash) { animation: none; }
+  :global(.sale-pop) { animation: none; display: none; }
+  :global(.flow-line) { stroke-dasharray: none; stroke-opacity: 0; }
+  :global(.strike-line) { animation: none; }
+  :global(.phone-float) { animation: none; }
+  :global(.ret-pop) { animation: none; }
+  :global(.ret-burst), :global(.ret-shock) { display: none; }
+  :global(.fly-pulse) { animation: none; opacity: 0; }
+  :global(.pain-flicker), :global(.pain-glow), :global(.pain-glitch), :global(.pain-count), :global(.pain-caret) { animation: none; }
+  :global(.pain-ping), :global(.pain-drip), :global(.pain-scanline) { display: none; }
+  :global(.fly-spoke), :global(.fly-ripple), :global(.fly-core-ring) { display: none; }
+  :global(.fly-bump), :global(.fly-num) { animation: none; }
+}
+
+/* "What you can't get from a freelancer" */
+:global(.why-shine) { animation: why-shine 4.5s ease-in-out infinite; }
+@keyframes why-shine {
+  0%, 55% { transform: translateX(0) skewX(-18deg); }
+  100% { transform: translateX(450%) skewX(-18deg); }
+}
+:global(.why-ring) { transform-origin: center; animation: why-ring 2.8s ease-in-out infinite; }
+@keyframes why-ring {
+  0%, 70%, 100% { transform: rotate(0); }
+  74%, 82%, 90% { transform: rotate(-14deg); }
+  78%, 86%, 94% { transform: rotate(14deg); }
+}
+:global(.why-metal) {
+  background: linear-gradient(110deg, #c9c3d6 20%, #ffffff 40%, #c9c3d6 60%, #9a8fa8 80%);
+  background-size: 250% 100%;
+  animation: why-metal 3.5s linear infinite;
+}
+@keyframes why-metal {
+  from { background-position: 100% 0; }
+  to { background-position: -150% 0; }
+}
+:global(.why-seat) { animation: why-seat 1.6s ease-in-out infinite; }
+@keyframes why-seat {
+  50% { box-shadow: 0 0 0 4px rgba(240, 75, 154, 0.25), 0 0 12px rgba(240, 75, 154, 0.8); }
+}
+:global(.why-seq) { animation: why-seq 2.5s ease-in-out infinite; }
+@keyframes why-seq {
+  0%, 30%, 100% { border-color: rgba(244, 239, 230, 0.15); color: rgba(244, 239, 230, 0.6); box-shadow: none; }
+  10%, 20% { border-color: #35D6C4; color: #35D6C4; box-shadow: 0 0 12px rgba(53, 214, 196, 0.45); }
+}
+:global(.why-bob) { animation: why-bob 2.4s ease-in-out infinite; }
+@keyframes why-bob {
+  50% { transform: translateY(-4px); }
+}
+:global(.why-strike)::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  top: 52%;
+  height: 0.09em;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: strike-draw 0.8s cubic-bezier(0.7, 0, 0.2, 1) 0.6s forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(.why-shine), :global(.why-ring), :global(.why-metal), :global(.why-seat), :global(.why-seq), :global(.why-bob) { animation: none; }
+  :global(.why-shine) { display: none; }
+  :global(.why-strike)::after { animation: none; transform: scaleX(1); }
+}
+
+/* Fit check */
+:global(.fit-draw) { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.5s ease-out; }
+:global(.fit-draw-on) { stroke-dashoffset: 0; }
+:global(.fit-underline) { transform: scaleX(0); transform-origin: left; transition: transform 0.8s cubic-bezier(0.7, 0, 0.2, 1) 0.3s; }
+:global(.fit-underline-on) { transform: scaleX(1); }
+:global(.fit-march) { animation: fit-march 1.2s linear infinite; }
+@keyframes fit-march {
+  to { stroke-dashoffset: -14; }
+}
+:global(.fit-stamp) { animation: fit-stamp 3.2s ease-in-out infinite; }
+@keyframes fit-stamp {
+  50% { transform: rotate(-9deg) scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(.fit-march), :global(.fit-stamp) { animation: none; }
+  :global(.fit-draw), :global(.fit-underline) { transition: none; }
+}
+
+@keyframes faq-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes faq-orb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -20px) scale(1.15); }
+}
+:global(.faq-row) { animation: faq-in .7s cubic-bezier(.2,.7,.2,1) both; }
+:global(.faq-row)::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, color-mix(in srgb, var(--color-pink) 14%, transparent) 50%, transparent 70%);
+  transform: translateX(-100%); transition: transform .8s ease;
+}
+:global(.faq-row):hover::before { transform: translateX(100%); }
+@media (prefers-reduced-motion: reduce) {
+  :global(.faq-row), :global(.faq-orb) { animation: none !important; }
+}
+
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(40px); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes hero-shine {
+  to { background-position: 200% center; }
+}
+@keyframes hero-glow {
+  0%, 100% { opacity: .35; transform: scale(1); }
+  50% { opacity: .6; transform: scale(1.12); }
+}
+@keyframes hero-chip {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-12px) rotate(var(--r, 0deg)); }
+}
+@keyframes hero-scroll {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(250%); }
+}
+:global(.hero-rise) { animation: hero-rise .9s cubic-bezier(.2,.7,.2,1) both; }
+:global(.hero-selling) {
+  background: linear-gradient(100deg, var(--color-pink) 20%, #ffd1e8 38%, var(--color-amber) 50%, var(--color-pink) 66%, var(--color-pink) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: hero-shine 5s linear infinite;
+  filter: drop-shadow(0 0 28px color-mix(in srgb, var(--color-pink) 55%, transparent));
+}
+:global(.hero-chip) { animation: hero-chip 6s ease-in-out infinite; }
+:global(.hero-btn-shine) { position: relative; overflow: hidden; }
+:global(.hero-btn-shine)::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-120%) skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  transition: transform .7s ease;
+}
+:global(.hero-btn-shine):hover::after { transform: translateX(120%) skewX(-20deg); }
+@media (prefers-reduced-motion: reduce) {
+  :global(.hero-rise), :global(.hero-selling), :global(.hero-chip) { animation: none !important; }
+}

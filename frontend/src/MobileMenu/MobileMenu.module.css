@@ -225,3 +225,14 @@
   letter-spacing: 0.22em;
   color: rgba(244, 239, 230, 0.22);
 }
+
+/* Current page */
+.navItemActive {
+  background: rgba(240, 75, 154, 0.12);
+  color: var(--color-cream);
+  box-shadow: inset 3px 0 0 var(--color-pink);
+}
+.navItemActive .navIcon {
+  background: rgba(240, 75, 154, 0.2);
+  color: var(--color-pink);
+}

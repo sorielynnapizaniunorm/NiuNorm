@@ -1278,12 +1278,12 @@
 /* Stat stack */
 /* Marquee rows */
 .rows {
-  position: relative; display: grid; gap: 0.6rem; margin: 4rem -4vw 0; rotate: -2deg;
+  position: relative; display: grid; gap: 0.6rem; margin: 4rem -4vw 0;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
-  opacity: 0; transform: translateY(40px); transition: opacity 1s 0.5s ease, transform 1.1s 0.5s cubic-bezier(0.2, 0.9, 0.2, 1);
+  opacity: 0; transform: rotate(-2deg) translateY(40px); transition: opacity 1s 0.5s ease, transform 1.1s 0.5s cubic-bezier(0.2, 0.9, 0.2, 1);
 }
-.bwInView .rows { opacity: 1; transform: none; }
+.bwInView .rows { opacity: 1; transform: rotate(-2deg); }
 .rows::before {
   content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 60%; translate: 0 -50%; z-index: -1;
   background: linear-gradient(90deg, transparent, rgb(240 75 154 / 0.22), rgb(245 185 79 / 0.14), rgb(53 214 196 / 0.18), transparent);

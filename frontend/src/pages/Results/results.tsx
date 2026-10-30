@@ -399,6 +399,78 @@ function StatCard({ stat, className }: { stat: Stat; className?: string }) {
   );
 }
 
+function GmvSection() {
+  const [ref, inView] = useInView<HTMLElement>(0.25);
+  const gmv = useCountUp(700, inView, 300, 1800);
+  const milestones = [
+    { label: "100M", left: "0%" },
+    { label: "250M", left: "33%" },
+    { label: "500M", left: "66%" },
+    { label: "700M", left: "100%" },
+  ];
+
+  return (
+    <section ref={ref} className={`${styles.gmv} ${inView ? styles.inView : ""}`}>
+      <div className={styles.gmvDots} aria-hidden />
+      <div className={styles.gmvWatermark} aria-hidden>GMV</div>
+      <svg className={styles.gmvCurve} viewBox="0 0 1600 520" preserveAspectRatio="none" aria-hidden>
+        <path className={styles.gmvArea} d="M0 500 C260 500 430 470 650 410 S1100 260 1600 120 L1600 520 L0 520Z" fill="url(#gmvAreaGradient)" />
+        <path className={styles.gmvLine} d="M0 500 C260 500 430 470 650 410 S1100 260 1600 120" fill="none" stroke="#F04B9A" strokeWidth="3" />
+        <defs>
+          <linearGradient id="gmvAreaGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#F04B9A" stopOpacity="0.2" />
+            <stop offset="1" stopColor="#F04B9A" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 md:px-10 md:py-28">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className={styles.reveal}>
+            <div className={styles.bigNumber}>
+              <span className={styles.bigNumberShadow} aria-hidden>700M</span>
+              <span className={styles.bigNumberFill}>{gmv}M</span>
+            </div>
+            <h2 className="mt-4 font-display text-[clamp(1.7rem,3.8vw,3rem)] font-black uppercase leading-none">
+              GMV generated<span className="text-pink">.</span>
+            </h2>
+            <div className={styles.rail} aria-label="GMV milestones">
+              <span className={styles.railFill} />
+              {milestones.map((milestone) => (
+                <span key={milestone.label} className={styles.railStop} style={{ left: milestone.left }}>
+                  <i />
+                  <b>{milestone.label}</b>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className={`${styles.gmvCard} ${styles.reveal}`} style={{ transitionDelay: "0.25s" }}>
+            <div className={styles.toastSlot}>
+              <div className={styles.toast} style={{ ["--c" as string]: "#F5B94F" }}>
+                <span className={styles.toastIcon}>✓</span>
+                <span className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-cream">
+                  Checkout
+                  <small className="ml-2 text-cream/50">Wellness · +₱2,150</small>
+                </span>
+              </div>
+            </div>
+            <p className="text-base leading-relaxed text-ink/90 sm:text-lg">
+              A collective milestone built through our work with brands on TikTok Shop.
+            </p>
+            <p className="mt-6 text-base leading-relaxed text-ink/65 sm:text-lg">
+              Behind this number are products discovered, orders placed, and teams working together to grow their businesses.
+            </p>
+            <p className="mt-6 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-ink/45">
+              *Combined GMV across brands managed by Niunorm.*
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ==========================================================
    Brand logo wall + brand orbit
    ========================================================== */
@@ -996,6 +1068,9 @@ export default function Results() {
           ))}
         </div>
       </div>
+
+      {/* GMV MILESTONE */}
+      <GmvSection />
 
       {/* BRAND LOGO WALL */}
       <BrandLogoWall />

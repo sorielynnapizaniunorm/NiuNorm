@@ -3,6 +3,21 @@ import { Link } from "react-router";
 import styles from "./about.module.css";
 import teamPhoto from "../../imports/resultsBg";
 import logo from "../../imports/NiunormLogo.png";
+import aboutHeroBg from "../../imports/aboutHeroPhoto.jpg";
+import teamMeetingPhoto from "../../imports/aboutTeamMeeting.jpg";
+import teamCollaborationPhoto from "../../imports/aboutTeamCollaboration.jpg";
+import teamDiscussionPhoto from "../../imports/aboutTeamDiscussion.jpg";
+import tiktokEventPhoto from "../../imports/aboutTikTokEvent.jpg";
+import industryCollaborationPhoto from "../../imports/aboutIndustryCollaboration.jpg";
+import gmaFeaturePhoto from "../../imports/aboutGmaFeature.jpg";
+import tiktokNewsroomPhoto from "../../imports/aboutTikTokNewsroom.png";
+import helloMnlPhoto from "../../imports/aboutHelloMnl.png";
+import maverickPhoto from "../../imports/aboutMaverick.jpg";
+import isabellatrexPhoto from "../../imports/aboutIsabellatrex.jpg";
+import joannaPhoto from "../../imports/aboutJoanna.jpg";
+import cyllenePhoto from "../../imports/aboutCyllene.jpg";
+import aliyannPhoto from "../../imports/aboutAliyann.jpg";
+import mheaPhoto from "../../imports/aboutMhea.jpg";
 
 /** Adds the in-view class once the element scrolls into view. */
 function useInView<T extends Element>(threshold = 0.25) {
@@ -63,11 +78,18 @@ function CountUp({ value, delay = 0 }: { value: string; delay?: number }) {
   );
 }
 
-const SEAL_TEXT = "Meet NiuNorm · TikTok Shop Partner · Philippines · ";
+// Deterministic bokeh specks floating over the hero photo.
+const BOKEH = Array.from({ length: 14 }, (_, i) => ({
+  x: (i * 37 + 11) % 100,
+  s: 4 + ((i * 7) % 9),
+  d: 9 + ((i * 5) % 8),
+  o: (i * 1.3) % 9,
+  c: ["#F04B9A", "#F5B94F", "#35D6C4", "#F4EFE6"][i % 4],
+}));
 
 function AboutHero() {
   const heroRef = useRef<HTMLElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const timeRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -76,23 +98,24 @@ function AboutHero() {
       const r = hero.getBoundingClientRect();
       hero.style.setProperty("--mx", `${e.clientX - r.left}px`);
       hero.style.setProperty("--my", `${e.clientY - r.top}px`);
-      const card = cardRef.current;
-      if (!card) return;
-      const c = card.getBoundingClientRect();
-      const px = (e.clientX - c.left) / c.width - 0.5;
-      const py = (e.clientY - c.top) / c.height - 0.5;
-      card.style.setProperty("--rx", `${(-py * 8).toFixed(2)}deg`);
-      card.style.setProperty("--ry", `${(px * 10).toFixed(2)}deg`);
-      card.style.setProperty("--gx", `${((px + 0.5) * 100).toFixed(1)}%`);
-      card.style.setProperty("--gy", `${((py + 0.5) * 100).toFixed(1)}%`);
+      hero.style.setProperty("--px", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+      hero.style.setProperty("--py", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
     };
     const leave = () => {
-      cardRef.current?.style.setProperty("--rx", "0deg");
-      cardRef.current?.style.setProperty("--ry", "0deg");
+      hero.style.setProperty("--px", "0");
+      hero.style.setProperty("--py", "0");
     };
+    // Camera-style running timecode for the viewfinder.
+    const start = performance.now();
+    const pad = (n: number) => String(Math.floor(n)).padStart(2, "0");
+    const tick = window.setInterval(() => {
+      const t = (performance.now() - start) / 1000;
+      if (timeRef.current) timeRef.current.textContent = `${pad(t / 3600)}:${pad((t / 60) % 60)}:${pad(t % 60)}:${pad((t * 30) % 30)}`;
+    }, 50);
     hero.addEventListener("pointermove", move);
     hero.addEventListener("pointerleave", leave);
     return () => {
+      window.clearInterval(tick);
       hero.removeEventListener("pointermove", move);
       hero.removeEventListener("pointerleave", leave);
     };
@@ -100,28 +123,64 @@ function AboutHero() {
 
   return (
     <section ref={heroRef} className={styles.hero}>
+      <div className={styles.heroMedia}>
+        <div className={styles.heroParallax}>
+          <img src={aboutHeroBg} alt="The NiuNorm team" className={styles.heroImg} draggable={false} />
+        </div>
+        <span className={styles.heroDuotone} aria-hidden />
+        <span className={styles.heroLeak} aria-hidden />
+        <span className={styles.heroLeak2} aria-hidden />
+        <span className={styles.heroSweep} aria-hidden />
+        <span className={styles.heroScan} aria-hidden />
+      </div>
+      <div className={styles.heroShade} aria-hidden />
+      <div className={styles.heroLight} aria-hidden />
       <div className={styles.heroGrid} aria-hidden />
-      <div className={styles.heroGlow} aria-hidden />
-      <div className={styles.heroGlow2} aria-hidden />
       <div className={styles.spotlight} aria-hidden />
+      <div className={styles.bokeh} aria-hidden>
+        {BOKEH.map((b, i) => (
+          <i
+            key={i}
+            style={{ left: `${b.x}%`, width: b.s, height: b.s, background: b.c, color: b.c, animationDuration: `${b.d}s`, animationDelay: `${-b.o}s` }}
+          />
+        ))}
+      </div>
       <div className={styles.grain} aria-hidden />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 pt-32 sm:px-6 md:grid-cols-[1.1fr_0.9fr] md:px-10 md:pb-28 md:pt-40">
-        <div>
+      {/* Camera viewfinder framing the team */}
+      <div className={styles.viewfinder} aria-hidden>
+        <i />
+        <i />
+        <i />
+        <i />
+        <span className={styles.vfRec}>
+          <b /> Rec
+        </span>
+        <span ref={timeRef} className={styles.vfTime}>
+          00:00:00:00
+        </span>
+        <span className={styles.vfFocus} />
+        <span className={styles.vfTag}>
+          <span className={styles.liveDot} /> The NiuNorm team · Philippines
+        </span>
+      </div>
+
+      <div className="relative mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-20 pt-[44svh] sm:px-6 md:justify-center md:px-10 md:pb-28 md:pt-36">
+        <div className={`${styles.heroCopy} max-w-[40rem]`}>
           <p className={`${styles.eyebrow} ${styles.rise}`}>
             <span className={styles.liveDot} /> Meet NiuNorm
           </p>
-          <h1 className="font-display text-[clamp(2.1rem,4vw,3.6rem)] font-black uppercase leading-[0.95] tracking-tight">
+          <h1 className="font-display text-[clamp(2.2rem,4.6vw,4.2rem)] font-black uppercase leading-[0.95] tracking-tight">
             <span className={styles.lineMask}>
-              <span className={styles.lineIn} style={{ animationDelay: "0.15s" }}>The people behind</span>
+              <span className={styles.lineIn} style={{ animationDelay: "0.5s" }}>The people behind</span>
             </span>
             <span className={styles.lineMask}>
-              <span className={styles.lineIn} style={{ animationDelay: "0.3s" }}>your shop’s</span>
+              <span className={styles.lineIn} style={{ animationDelay: "0.65s" }}>your shop’s</span>
             </span>
             <span className={styles.lineMask}>
-              <span className={styles.lineIn} style={{ animationDelay: "0.45s" }}>
+              <span className={styles.lineIn} style={{ animationDelay: "0.8s" }}>
                 <span className={styles.swoosh}>
-                  <span className={styles.shimmer}>next chapter.</span>
+                  <span className={`${styles.shimmer} ${styles.glowText}`}>next chapter.</span>
                   <svg viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden>
                     <path pathLength={1} d="M4 18 C 70 6, 150 4, 296 12" />
                   </svg>
@@ -129,78 +188,28 @@ function AboutHero() {
               </span>
             </span>
           </h1>
-          <p className={`${styles.rise} mt-8 max-w-xl text-base leading-relaxed text-cream/80 sm:text-lg`} style={{ animationDelay: "0.65s" }}>
+          <p className={`${styles.rise} mt-8 max-w-xl text-base leading-relaxed text-cream/85 sm:text-lg`} style={{ animationDelay: "1s" }}>
             NiuNorm is a TikTok Shop partner agency working with Filipino brands across beauty,
             fashion, wellness, pet essentials, and more.
           </p>
-          <p className={`${styles.rise} mt-4 max-w-xl text-base leading-relaxed text-cream/60 sm:text-lg`} style={{ animationDelay: "0.75s" }}>
+          <p className={`${styles.rise} mt-4 max-w-xl text-base leading-relaxed text-cream/65 sm:text-lg`} style={{ animationDelay: "1.1s" }}>
             We bring together people who understand the daily work behind a growing shop, from the
             content shoppers discover to the conversations that help them check out.
           </p>
-          <div className={`${styles.rise} mt-10 flex flex-wrap gap-3`} style={{ animationDelay: "0.9s" }}>
+          <div className={`${styles.rise} mt-10 flex flex-wrap gap-3`} style={{ animationDelay: "1.25s" }}>
             <a href="#team" className={`${btnPink} ${styles.btnShine}`}>
               Meet the Team
               <span className="transition-transform group-hover:translate-y-0.5">↓</span>
             </a>
           </div>
 
-          <ul className={`${styles.rise} ${styles.catRow}`} style={{ animationDelay: "1.05s" }}>
+          <ul className={`${styles.rise} ${styles.catRow}`} style={{ animationDelay: "1.4s" }}>
             {["Beauty", "Fashion", "Wellness", "Pet essentials", "And more"].map((c, i) => (
               <li key={c} style={{ ["--c" as string]: ["#F04B9A", "#F5B94F", "#35D6C4", "#FF66B2", "#9A8FA8"][i] }}>
                 {c}
               </li>
             ))}
           </ul>
-        </div>
-
-        <div className={styles.stage}>
-          <span className={styles.orbit1} aria-hidden />
-          <span className={styles.orbit2} aria-hidden />
-
-          <div ref={cardRef} className={styles.photoWrap}>
-            <span className={styles.photoFrame} aria-hidden />
-            <div className={styles.photo} style={{ backgroundImage: `url(${teamPhoto})` }} role="img" aria-label="The NiuNorm team">
-              <span className={styles.glare} aria-hidden />
-              <span className={styles.photoTint} aria-hidden />
-            </div>
-
-            {/* Rotating seal */}
-            <div className={styles.seal} aria-hidden>
-              <svg viewBox="0 0 120 120" className={styles.sealText}>
-                <defs>
-                  <path id="sealPath" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0" />
-                </defs>
-                <text>
-                  <textPath href="#sealPath">{SEAL_TEXT.repeat(2)}</textPath>
-                </text>
-              </svg>
-              <span className={styles.sealCore}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z" />
-                </svg>
-              </span>
-            </div>
-
-            <div className={`${styles.floatCard} ${styles.floatTop}`}>
-              <span className={styles.pulse} />
-              <span className="flex flex-col">
-                <span className="label text-teal">Working with</span>
-                <strong>Filipino brands</strong>
-              </span>
-            </div>
-
-            <div className={`${styles.floatCard} ${styles.photoBadge}`}>
-              <span className={styles.badgeIcon} aria-hidden>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8L12 2z" />
-                </svg>
-              </span>
-              <span className="flex flex-col">
-                <span className="label text-amber">5×</span>
-                <strong>TikTok Shop Partner</strong>
-              </span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -214,50 +223,84 @@ function AboutHero() {
 /* ---------- Data you can fill in ---------- */
 
 // Behind-the-scenes photos (Section 2). Add an image import to `src` to show a photo.
-const BTS_PHOTOS: { label: string; src?: string }[] = [
-  { label: "Planning" },
-  { label: "Filming" },
-  { label: "LIVE session" },
+const BTS_PHOTOS: { label: string; src?: string; pos?: string }[] = [
+  { label: "Team planning session", src: teamMeetingPhoto, pos: "50% 72%" },
+  { label: "Working together on a brand", src: teamCollaborationPhoto, pos: "50% 48%" },
+  { label: "Speaking at a TikTok Shop event", src: teamDiscussionPhoto, pos: "50% 48%" },
 ];
 
 // Event / speaking photos (Section 5).
-const EVENT_PHOTOS: { label: string; src?: string }[] = [
+const EVENT_PHOTOS: { label: string; src?: string; pos?: string }[] = [
   { label: "Speaking engagement", src: teamPhoto },
-  { label: "TikTok event" },
-  { label: "Industry collaboration" },
+  { label: "TikTok event", src: tiktokEventPhoto, pos: "50% 50%" },
+  { label: "Industry collaboration", src: industryCollaborationPhoto, pos: "50% 50%" },
 ];
 
-// Featured media (Section 6). Fill in the exact headline, date and link.
+// Featured media (Section 6).
 const FEATURE = {
-  outlet: "GMA Online",
-  headline: "",
-  date: "",
-  url: "",
+  outlet: "GMA News Online",
+  headline: "Thinking of starting a business? Here’s how to grow it on social media",
+  date: "May 19, 2026",
+  blurb: "NiuNorm+ founder and CEO Velasco shares how entrepreneurs can grow a business with simple, consistent social media content. No expensive equipment needed.",
+  url: "https://www.gmanetwork.com/news/money/companies/988168/thinking-of-starting-a-business-here-s-how-to-grow-it-on-social-media/story/",
+  img: gmaFeaturePhoto,
 };
 
-// Other events or collaborations (Section 6).
-const APPEARANCES: { tag: string; title: string; date: string; src?: string; url?: string }[] = [
-  { tag: "Speaking engagement", title: "", date: "", src: teamPhoto },
-  { tag: "Event", title: "", date: "" },
-  { tag: "Collaboration", title: "", date: "" },
+// More press coverage (Section 6).
+const ARTICLES = [
+  {
+    outlet: "TikTok Newsroom",
+    title: "TikTok Shop Brings Unlad Lokal to Pasig City to Strengthen MSME Digitalization and Creator-Led Discovery Commerce",
+    date: "May 21, 2026",
+    blurb: "NiuNorm supported Unlad Lokal in Pasig, representing brand partners Girl Code, Labsky, Glow Glass Beauty, JSkin, Twelve Twenty, and Kirste.",
+    url: "https://newsroom.tiktok.com/tiktok-shop-brings-unlad-lokal-to-pasig-city-to-strengthen-msme-digitalization-and-creator-led-discovery-commerce?lang=en-PH",
+    img: tiktokNewsroomPhoto,
+    pos: "50% 30%",
+    c: "#35D6C4",
+  },
+  {
+    outlet: "adobo Magazine",
+    title: "TikTok Shop brings Unlad Lokal to Pasig, spotlighting digital literacy in the age of discovery commerce",
+    date: "May 28, 2026",
+    blurb: "How platform literacy, creator ecosystems, and local partnerships are shaping MSME growth, with brand partners represented by NiuNorm.",
+    url: "https://www.adobomagazine.com/featured/tiktok-shop-brings-unlad-lokal-to-pasig-spotlighting-digital-literacy-in-the-age-of-discovery-commerce/",
+    img: tiktokEventPhoto,
+    pos: "50% 50%",
+    c: "#F5B94F",
+  },
+  {
+    outlet: "Hello Mnl",
+    title: "TikTok Shop Brings Unlad Lokal to Pasig City to Strengthen MSME Digitalization",
+    date: "May 31, 2026",
+    blurb: "Digital training, creators, and LGU partnerships for Pasig MSMEs, supported by J&T Express Philippines and NiuNorm.",
+    url: "https://hellomnl.com/tiktok-shop-brings-unlad-lokal-to-pasig-city-to-strengthen-msme-digitalization/",
+    img: helloMnlPhoto,
+    pos: "50% 50%",
+    c: "#F04B9A",
+  },
 ];
 
-// Team (Section 7). Add a photo import to `src` for each person.
-const TEAM: { name: string; role: string; desc: string; src?: string }[] = [
-  { name: "", role: "", desc: "" },
-  { name: "", role: "", desc: "" },
-  { name: "", role: "", desc: "" },
-  { name: "", role: "", desc: "" },
+// Team (Section 7).
+type Member = { name: string; role: string; dept: string; src: string; c: string; pos?: string };
+const FOUNDERS: Member[] = [
+  { name: "Maverick Velasco", role: "Founder of NiuNorm", dept: "Leadership", src: maverickPhoto, c: "#F5B94F", pos: "50% 22%" },
+  { name: "Isabellatrex Velasco", role: "Founder of NiuNorm", dept: "Leadership", src: isabellatrexPhoto, c: "#F5B94F", pos: "50% 22%" },
+];
+const TEAM: Member[] = [
+  { name: "Joanna Sophia Nombre", role: "Senior Ads and Marketing", dept: "Ads & Marketing", src: joannaPhoto, c: "#F04B9A", pos: "50% 18%" },
+  { name: "Cyllene Panganiban", role: "Senior TikTok & Affiliate Manager", dept: "TikTok & Affiliate", src: cyllenePhoto, c: "#35D6C4", pos: "50% 18%" },
+  { name: "Aliyann Velasco", role: "Junior Ads and Marketing", dept: "Ads & Marketing", src: aliyannPhoto, c: "#FF66B2", pos: "50% 18%" },
+  { name: "Mhea Ann Pauline Arsino", role: "Junior TikTok & Affiliate Manager", dept: "TikTok & Affiliate", src: mheaPhoto, c: "#35D6C4", pos: "50% 18%" },
 ];
 
 /* ---------- Shared bits ---------- */
 
 /** A photo frame. Shows the image when `src` is set, otherwise a styled placeholder. */
-function PhotoSlot({ src, label, className = "" }: { src?: string; label: string; className?: string }) {
+function PhotoSlot({ src, label, className = "", pos, hideLabel = false }: { src?: string; label: string; className?: string; pos?: string; hideLabel?: boolean }) {
   return (
     <div className={`${styles.slot} ${src ? "" : styles.slotEmpty} ${className}`}>
       {src ? (
-        <div className={styles.slotImg} style={{ backgroundImage: `url(${src})` }} role="img" aria-label={label} />
+        <div className={styles.slotImg} style={{ backgroundImage: `url(${src})`, backgroundPosition: pos }} role="img" aria-label={label} />
       ) : (
         <div className={styles.slotPh} aria-hidden>
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -267,7 +310,7 @@ function PhotoSlot({ src, label, className = "" }: { src?: string; label: string
           <span>Add photo</span>
         </div>
       )}
-      <span className={styles.slotLabel}>{label}</span>
+      {!hideLabel && <span className={styles.slotLabel}>{label}</span>}
     </div>
   );
 }
@@ -363,7 +406,7 @@ function WhoSection() {
         <div className={styles.mosaic}>
           {BTS_PHOTOS.map((p, i) => (
             <div key={p.label} className={`${styles.mosaicItem} ${styles[`m${i}` as "m0"]} ${styles.reveal}`} style={{ transitionDelay: `${0.2 + i * 0.15}s` }}>
-              <PhotoSlot src={p.src} label={p.label} />
+              <PhotoSlot src={p.src} label={p.label} pos={p.pos} hideLabel />
             </div>
           ))}
           <span className={styles.mosaicTag} aria-hidden>
@@ -378,11 +421,43 @@ function WhoSection() {
 /* ---------- Section 3: Our purpose ---------- */
 
 const PURPOSE_LINE = "Our purpose is to help Filipino brands build stronger businesses on TikTok Shop.";
+const PURPOSE_HEAD = "Helping Filipino brands build their".split(" ");
+
+const PILLARS = [
+  {
+    k: "Understand",
+    c: "#35D6C4",
+    d: "We take the time to learn what you’re building: your products, your shoppers, and your priorities.",
+    icon: "M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 15a3 3 0 100-6 3 3 0 000 6z",
+  },
+  {
+    k: "Direct",
+    c: "#F5B94F",
+    d: "We bring clear direction to the work, so every content plan, LIVE and campaign has a reason behind it.",
+    icon: "M12 22a10 10 0 100-20 10 10 0 000 20zM16.2 7.8l-2.1 6.3-6.3 2.1 2.1-6.3 6.3-2.1z",
+  },
+  {
+    k: "Stay accountable",
+    c: "#F04B9A",
+    d: "We stay close to the details and own the next step, every week, as your business grows.",
+    icon: "M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5l8-3zM8.5 12l2.5 2.5 4.5-5",
+  },
+];
+
+// Deterministic starfield.
+const P_STARS = Array.from({ length: 34 }, (_, i) => ({
+  x: (i * 53 + 7) % 100,
+  y: (i * 29 + 13) % 78,
+  s: 1 + (i % 3),
+  d: 2.5 + ((i * 7) % 5),
+  o: (i * 0.7) % 4,
+}));
 
 function PurposeSection() {
   const [ref, inView] = useInView<HTMLElement>(0.2);
   const textRef = useRef<HTMLParagraphElement>(null);
   const [p, setP] = useState(0);
+  const spot = useSpotlight();
 
   // Words light up as you scroll past.
   useEffect(() => {
@@ -402,47 +477,93 @@ function PurposeSection() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const onMove = (e: React.PointerEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+
   const words = PURPOSE_LINE.split(" ");
 
   return (
-    <section ref={ref} className={`${styles.purpose} ${inView ? styles.inView : ""}`}>
+    <section ref={ref} onPointerMove={onMove} className={`${styles.purpose} ${inView ? styles.inView : ""}`}>
       <div className={styles.purposeGrid} aria-hidden />
+      <div className={styles.pRays} aria-hidden />
+      <div className={styles.pRings} aria-hidden>
+        <span />
+        <span />
+        <span />
+      </div>
       <div className={styles.purposeGlow} aria-hidden />
+      <div className={styles.pStars} aria-hidden>
+        {P_STARS.map((s, i) => (
+          <i key={i} style={{ left: `${s.x}%`, top: `${s.y}%`, width: s.s, height: s.s, animationDuration: `${s.d}s`, animationDelay: `${-s.o}s` }} />
+        ))}
+      </div>
+      <div className={styles.pSpot} aria-hidden />
+      <div className={styles.pHorizon} aria-hidden />
       <span className={styles.chapter} aria-hidden>
         <em>Chapter</em> 02
       </span>
 
-      <div className="relative mx-auto max-w-5xl px-5 py-24 text-center sm:px-6 md:px-10 md:py-36">
+      <div className="relative mx-auto max-w-6xl px-5 pb-40 pt-24 text-center sm:px-6 md:px-10 md:pb-52 md:pt-36">
         <p className={`${styles.eyebrow} ${styles.reveal} mx-auto`}>
           <span className={styles.liveDot} /> Our purpose
         </p>
-        <h2 className={`mx-auto max-w-4xl font-display text-[clamp(2.2rem,5.6vw,4.6rem)] font-black uppercase leading-[0.92] tracking-tight ${styles.reveal}`} style={{ transitionDelay: "0.1s" }}>
-          Helping Filipino brands build their <span className={styles.shimmer}>next chapter.</span>
+        <h2 className={`${styles.pHead} mx-auto max-w-4xl font-display text-[clamp(2.2rem,5.6vw,4.6rem)] font-black uppercase leading-[0.92] tracking-tight`}>
+          {PURPOSE_HEAD.map((w, i) => (
+            <span key={i}>
+              <span className={styles.hWord} style={{ ["--i" as string]: i }}>{w}</span>{" "}
+            </span>
+          ))}
+          <span className={`${styles.hWord} ${styles.pChapter}`} style={{ ["--i" as string]: PURPOSE_HEAD.length }}>
+            <span className={styles.shimmer}>next chapter.</span>
+            <svg viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden>
+              <path pathLength={1} d="M4 16 C 80 4, 170 4, 296 14" />
+            </svg>
+          </span>
         </h2>
 
-        <p ref={textRef} className={styles.purposeLine}>
-          {words.map((w, i) => {
-            const on = p * words.length > i;
-            const hot = /Filipino|brands|stronger|TikTok|Shop/.test(w);
-            return (
-              <span key={i} className={`${on ? styles.wordOn : ""} ${hot && on ? styles.wordHot : ""}`}>
-                {w}{" "}
-              </span>
-            );
-          })}
-        </p>
+        <div className={styles.pQuoteWrap}>
+          <span className={styles.pQuote} aria-hidden>“</span>
+          <p ref={textRef} className={styles.purposeLine}>
+            {words.map((w, i) => {
+              const on = p * words.length > i;
+              const hot = /Filipino|brands|stronger|TikTok|Shop/.test(w);
+              return (
+                <span key={i} className={`${on ? styles.wordOn : ""} ${hot && on ? styles.wordHot : ""}`}>
+                  {w}{" "}
+                </span>
+              );
+            })}
+          </p>
+          <span className={styles.pProgress} style={{ ["--p" as string]: p }} aria-hidden />
+        </div>
 
-        <p className={`mx-auto mt-8 max-w-2xl text-base leading-relaxed text-cream/65 sm:text-lg ${styles.reveal}`} style={{ transitionDelay: "0.3s" }}>
+        <p className={`mx-auto mt-10 max-w-2xl text-base leading-relaxed text-cream/65 sm:text-lg ${styles.reveal}`} style={{ transitionDelay: "0.3s" }}>
           We believe brands deserve a team that takes the time to understand what they’re building,
           brings direction to the work, and stays accountable as the business grows.
         </p>
 
-        <div className={`${styles.beliefs} ${styles.reveal}`} style={{ transitionDelay: "0.45s" }}>
-          {["Understand", "Direct", "Stay accountable"].map((b, i) => (
-            <span key={b} style={{ ["--c" as string]: ["#35D6C4", "#F5B94F", "#F04B9A"][i] }}>
-              <i />
-              {b}
-            </span>
+        <div className={styles.pillars}>
+          <div className={styles.pTrack} aria-hidden>
+            <span className={styles.pTrackLine} />
+            <span className={styles.pComet} />
+            {PILLARS.map((pl, i) => (
+              <i key={pl.k} style={{ ["--c" as string]: pl.c, ["--i" as string]: i }} />
+            ))}
+          </div>
+          {PILLARS.map((pl, i) => (
+            <article key={pl.k} className={styles.pillar} style={{ ["--c" as string]: pl.c, ["--i" as string]: i }} {...spot}>
+              <span className={styles.pillarIcon}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d={pl.icon} pathLength={1} />
+                </svg>
+              </span>
+              <span className={styles.pillarNum}>0{i + 1}</span>
+              <h3 className="mt-5 font-display text-xl font-black uppercase tracking-tight text-cream">{pl.k}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-cream/65">{pl.d}</p>
+            </article>
           ))}
         </div>
       </div>
@@ -513,35 +634,82 @@ function ValueScene({ i }: { i: number }) {
 }
 
 function ValuesSection() {
-  const [ref, inView] = useInView<HTMLElement>(0.2);
+  const [ref, inView] = useInView<HTMLElement>(0.15);
   const spot = useSpotlight();
+  const head = ["What", "you", "can"];
 
   return (
     <section ref={ref} className={`${styles.values} ${inView ? styles.inView : ""}`}>
       <div className={styles.valuesGrid} aria-hidden />
+      <div className={styles.vAurora} aria-hidden>
+        <span />
+        <span />
+        <span />
+      </div>
       <div className={styles.valuesGlow} aria-hidden />
-      <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 md:px-10 md:py-32">
-        <p className={`${styles.eyebrow} ${styles.reveal}`}>
-          <span className={styles.liveDot} /> What we value
-        </p>
-        <h2 className={`max-w-3xl font-display text-[clamp(2rem,5vw,4rem)] font-black uppercase leading-[0.92] tracking-tight ${styles.reveal}`} style={{ transitionDelay: "0.1s" }}>
-          What you can <span className={styles.never}>expect</span> from us.
-        </h2>
+      <div className={styles.vWatermark} aria-hidden>
+        <div>
+          {[0, 1].map((k) => (
+            <span key={k}>
+              {VALUES.map((v) => (
+                <em key={v.title} style={{ ["--c" as string]: v.color }}>
+                  {v.title}
+                  <b>✦</b>
+                </em>
+              ))}
+            </span>
+          ))}
+        </div>
+      </div>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 md:px-10 md:py-32">
+        <div className="grid items-end gap-8 md:grid-cols-[1fr_auto]">
+          <div>
+            <p className={`${styles.eyebrow} ${styles.reveal}`}>
+              <span className={styles.liveDot} /> What we value
+            </p>
+            <h2 className={`${styles.pHead} max-w-3xl font-display text-[clamp(2rem,5vw,4rem)] font-black uppercase leading-[0.92] tracking-tight`}>
+              {head.map((w, i) => (
+                <span key={w}>
+                  <span className={styles.hWord} style={{ ["--i" as string]: i }}>{w}</span>{" "}
+                </span>
+              ))}
+              <span className={styles.hWord} style={{ ["--i" as string]: 3 }}>
+                <span className={styles.never}>expect</span>
+              </span>{" "}
+              <span className={styles.hWord} style={{ ["--i" as string]: 4 }}>from</span>{" "}
+              <span className={styles.hWord} style={{ ["--i" as string]: 5 }}>us.</span>
+            </h2>
+          </div>
+          <div className={`${styles.vIndex} ${styles.reveal}`} style={{ transitionDelay: "0.5s" }}>
+            <span className={styles.vIndexRing} aria-hidden>
+              <b>04</b>
+            </span>
+            <span className="flex flex-col">
+              <span className="label text-cream/50">Values</span>
+              <strong>One way of working</strong>
+            </span>
+          </div>
+        </div>
+
+        <div className={`${styles.vDeck} mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4`}>
           {VALUES.map((v, i) => (
-            <div key={v.title} className={styles.reveal} style={{ transitionDelay: `${0.2 + i * 0.12}s` }}>
+            <div key={v.title} className={styles.vDeal} style={{ ["--i" as string]: i }}>
               <article className={styles.valueCard} style={{ ["--c" as string]: v.color }} {...spot}>
+                <span className={styles.valueRing} aria-hidden />
                 <span className={styles.valueBorder} aria-hidden />
                 <span className={styles.valueSpot} aria-hidden />
+                <span className={styles.valueSheen} aria-hidden />
+                <span className={styles.valueWm} aria-hidden>0{i + 1}</span>
                 <div className={styles.valueVisual} aria-hidden>
                   <ValueScene i={i} />
                 </div>
                 <div className={styles.valueBody}>
                   <span className={styles.valueNum}>0{i + 1}</span>
-                  <h3 className="font-display text-2xl font-black uppercase leading-tight">{v.title}</h3>
+                  <h3 className={`${styles.valueTitle} font-display text-2xl font-black uppercase leading-tight`}>{v.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-cream/70">{v.body}</p>
                 </div>
+                <span className={styles.valueBar} aria-hidden />
               </article>
             </div>
           ))}
@@ -635,7 +803,7 @@ function EcosystemSection() {
         <div className={styles.eventStrip}>
           {EVENT_PHOTOS.map((p, i) => (
             <div key={p.label} className={`${styles.eventItem} ${i === 0 ? styles.eventBig : ""} ${styles.reveal}`} style={{ transitionDelay: `${0.3 + i * 0.12}s` }}>
-              <PhotoSlot src={p.src} label={p.label} />
+              <PhotoSlot src={p.src} label={p.label} pos={p.pos} />
             </div>
           ))}
         </div>
@@ -672,45 +840,53 @@ function SpotlightSection() {
               <i /> Featured on
             </span>
             <p className={styles.featureOutlet}>{FEATURE.outlet}</p>
-            <h3 className={`${styles.featureHeadline} ${FEATURE.headline ? "" : styles.isPh}`}>
-              {FEATURE.headline || "Article headline goes here"}
-            </h3>
-            <p className={`${styles.featureDate} ${FEATURE.date ? "" : styles.isPh}`}>{FEATURE.date || "Publication date"}</p>
-            <a
-              href={FEATURE.url || undefined}
-              target="_blank"
-              rel="noreferrer"
-              className={`${btnPink} ${styles.btnShine} mt-8 ${FEATURE.url ? "" : styles.btnOff}`}
-              aria-disabled={!FEATURE.url}
-            >
+            <h3 className={styles.featureHeadline}>{FEATURE.headline}</h3>
+            <p className={styles.featureDate}>{FEATURE.date}</p>
+            <p className="mt-5 max-w-lg text-sm leading-relaxed text-cream/70 sm:text-base">{FEATURE.blurb}</p>
+            <a href={FEATURE.url} target="_blank" rel="noopener noreferrer" className={`${btnPink} ${styles.btnShine} mt-8`}>
               Read the Feature
               <span className="transition-transform group-hover:translate-x-1">↗</span>
             </a>
           </div>
-          <div className={styles.featureArt} aria-hidden>
-            <span className={styles.featureMast}>{FEATURE.outlet}</span>
+          <a href={FEATURE.url} target="_blank" rel="noopener noreferrer" className={styles.featureArt} aria-label={`Read “${FEATURE.headline}” on ${FEATURE.outlet}`}>
+            <span className={styles.featureMast} aria-hidden>GMA News</span>
             <div className={styles.featurePaper}>
-              <span className={styles.fpTitle} />
-              <span className={styles.fpTitle} style={{ width: "70%" }} />
-              <span className={styles.fpImg} />
-              {[100, 92, 96, 60].map((w, k) => (
-                <span key={k} className={styles.fpLine} style={{ width: `${w}%` }} />
+              <span className={styles.fpBar} aria-hidden>
+                <i />
+                <i />
+                <i />
+                <b>gmanetwork.com</b>
+              </span>
+              <img src={FEATURE.img} alt="" className={styles.fpPhoto} draggable={false} />
+              <span className={styles.fpTitle} aria-hidden />
+              <span className={styles.fpTitle} style={{ width: "70%" }} aria-hidden />
+              {[100, 92, 60].map((w, k) => (
+                <span key={k} className={styles.fpLine} style={{ width: `${w}%` }} aria-hidden />
               ))}
             </div>
-          </div>
+          </a>
         </article>
 
-        {/* More appearances */}
+        {/* More press coverage */}
         <div className="mt-6 grid gap-5 md:grid-cols-3">
-          {APPEARANCES.map((a, i) => (
-            <div key={i} className={styles.reveal} style={{ transitionDelay: `${0.35 + i * 0.12}s` }}>
-              <article className={styles.appear}>
-                <PhotoSlot src={a.src} label={a.tag} className={styles.appearPhoto} />
-                <div className="p-5">
-                  <p className={`${styles.appearTitle} ${a.title ? "" : styles.isPh}`}>{a.title || "Event or collaboration title"}</p>
-                  <p className={`${styles.appearDate} ${a.date ? "" : styles.isPh}`}>{a.date || "Date"}</p>
-                </div>
-              </article>
+          {ARTICLES.map((a, i) => (
+            <div key={a.url} className={styles.reveal} style={{ transitionDelay: `${0.35 + i * 0.12}s` }}>
+              <a href={a.url} target="_blank" rel="noopener noreferrer" className={styles.appear} style={{ ["--c" as string]: a.c }}>
+                <span className={styles.appearPhoto}>
+                  <img src={a.img} alt="" style={{ objectPosition: a.pos }} draggable={false} />
+                  <span className={styles.appearOutlet}>
+                    <i /> {a.outlet}
+                  </span>
+                </span>
+                <span className={styles.appearBody}>
+                  <span className={styles.appearDate}>{a.date}</span>
+                  <span className={`${styles.appearTitle} line-clamp-3`}>{a.title}</span>
+                  <span className="mt-3 line-clamp-3 text-sm leading-relaxed text-ink/65">{a.blurb}</span>
+                  <span className={styles.appearCta}>
+                    Read article <span aria-hidden>↗</span>
+                  </span>
+                </span>
+              </a>
             </div>
           ))}
         </div>
@@ -721,22 +897,80 @@ function SpotlightSection() {
 
 /* ---------- Section 7: The team ---------- */
 
-function TeamSection() {
-  const [ref, inView] = useInView<HTMLElement>(0.15);
+/** A hanging "team pass" ID badge for one person. */
+function TeamPass({ m, i, id, founder = false }: { m: Member; i: number; id: string; founder?: boolean }) {
   const spot = useSpotlight();
-  const colors = ["#F04B9A", "#35D6C4", "#F5B94F", "#FF66B2"];
+  return (
+    <div className={`${styles.hang} ${founder ? styles.hangFounder : ""}`} style={{ ["--c" as string]: m.c, ["--i" as string]: i }}>
+      <span className={styles.strap} aria-hidden />
+      <span className={styles.clip} aria-hidden />
+      <article className={styles.pass} {...spot}>
+        <span className={styles.passFoil} aria-hidden />
+        <span className={styles.passEdge} aria-hidden />
+        <header className={styles.passTop}>
+          <img src={logo} alt="" className={styles.passLogo} />
+          <span className={styles.passBrand}>NiuNorm</span>
+          <span className={styles.passType}>{founder ? "Founder pass" : "Team pass"}</span>
+        </header>
+        <div className={styles.passPhoto}>
+          <img src={m.src} alt={m.name} style={{ objectPosition: m.pos }} draggable={false} loading="lazy" />
+          <span className={styles.passScan} aria-hidden />
+          <span className={styles.passDept}>
+            <i /> {m.dept}
+          </span>
+          {founder && (
+            <span className={styles.passStar} aria-hidden>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d={STAR} />
+              </svg>
+            </span>
+          )}
+        </div>
+        <div className={styles.passBody}>
+          <h3 className={styles.passName}>{m.name}</h3>
+          <p className={styles.passRole}>{m.role}</p>
+          <div className={styles.passFoot}>
+            <span>ID · {id}</span>
+            <span className={styles.passCode} aria-hidden>
+              {Array.from({ length: 22 }, (_, k) => (
+                <i key={k} style={{ width: (k * 7 + i * 3) % 3 === 0 ? 3 : 1.5 }} />
+              ))}
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+  );
+}
+
+function TeamSection() {
+  const [ref, inView] = useInView<HTMLElement>(0.08);
+  const head = ["Meet", "the", "people", "you’ll"];
 
   return (
     <section id="team" ref={ref} className={`${styles.team} ${inView ? styles.inView : ""}`}>
       <div className={styles.valuesGrid} aria-hidden />
+      <div className={styles.teamGlow} aria-hidden />
+      <div className={styles.teamBeams} aria-hidden>
+        <i />
+        <i />
+        <i />
+      </div>
       <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 md:px-10 md:py-32">
         <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr] md:items-end">
           <div>
             <p className={`${styles.eyebrow} ${styles.reveal}`}>
               <span className={styles.liveDot} /> The team
             </p>
-            <h2 className={`font-display text-[clamp(2rem,5vw,4rem)] font-black uppercase leading-[0.92] tracking-tight ${styles.reveal}`} style={{ transitionDelay: "0.1s" }}>
-              Meet the people you’ll <span className={styles.shimmer}>build with.</span>
+            <h2 className={`${styles.pHead} font-display text-[clamp(2rem,5vw,4rem)] font-black uppercase leading-[0.92] tracking-tight`}>
+              {head.map((w, i) => (
+                <span key={w}>
+                  <span className={styles.hWord} style={{ ["--i" as string]: i }}>{w}</span>{" "}
+                </span>
+              ))}
+              <span className={styles.hWord} style={{ ["--i" as string]: 4 }}>
+                <span className={styles.shimmer}>build with.</span>
+              </span>
             </h2>
           </div>
           <div className="space-y-3 text-base leading-relaxed text-cream/65 sm:text-lg">
@@ -750,32 +984,23 @@ function TeamSection() {
           </div>
         </div>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {TEAM.map((t, i) => (
-            <div key={i} className={styles.reveal} style={{ transitionDelay: `${0.25 + i * 0.12}s` }}>
-              <article className={styles.member} style={{ ["--c" as string]: colors[i % colors.length] }} {...spot}>
-                <span className={styles.valueBorder} aria-hidden />
-                <div className={styles.memberPhoto}>
-                  {t.src ? (
-                    <div className={styles.slotImg} style={{ backgroundImage: `url(${t.src})` }} role="img" aria-label={t.name} />
-                  ) : (
-                    <div className={styles.memberPh} aria-hidden>
-                      <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8z" />
-                      </svg>
-                    </div>
-                  )}
-                  <div className={styles.memberMore}>
-                    <p className={t.desc ? "" : styles.isPh}>{t.desc || "A short description of what this person handles for partner brands."}</p>
-                  </div>
-                </div>
-                <div className={styles.memberInfo}>
-                  <h3 className={`${styles.memberName} ${t.name ? "" : styles.isPh}`}>{t.name || "Team member"}</h3>
-                  <p className={`${styles.memberRole} ${t.role ? "" : styles.isPh}`}>{t.role || "Role"}</p>
-                </div>
-              </article>
-            </div>
+        {/* Founders */}
+        <div className={`${styles.teamRowLabel} ${styles.reveal}`} style={{ transitionDelay: "0.3s" }}>
+          <span>Founders</span>
+        </div>
+        <div className={styles.foundersRow}>
+          {FOUNDERS.map((m, i) => (
+            <TeamPass key={m.name} m={m} i={i} id={`NN-F0${i + 1}`} founder />
+          ))}
+        </div>
+
+        {/* Team */}
+        <div className={`${styles.teamRowLabel} ${styles.reveal}`} style={{ transitionDelay: "0.2s" }}>
+          <span>The team</span>
+        </div>
+        <div className={styles.teamRow}>
+          {TEAM.map((m, i) => (
+            <TeamPass key={m.name} m={m} i={i + 2} id={`NN-0${i + 1}`} />
           ))}
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router";
 import styles from "./niunies.module.css";
+import heroImage from "../imports/niuniesHero.jpg";
 
 const L = {
   girlCode: "/brand-logos/girl-code.png",
@@ -215,6 +216,8 @@ function Hero() {
 
   return (
     <section ref={ref} className={styles.hero}>
+      <div className={styles.heroImage} style={{ backgroundImage: `url(${heroImage})` }} aria-hidden />
+      <div className={styles.heroShade} aria-hidden />
       <div className={styles.heroGrid} aria-hidden />
       <div className={styles.heroGlowA} aria-hidden />
       <div className={styles.heroGlowB} aria-hidden />

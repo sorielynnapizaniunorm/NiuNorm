@@ -66,6 +66,23 @@
    Hero
    ========================================================= */
 .hero { --mx: 70%; --my: 40%; --px: 0; --py: 0; position: relative; overflow: hidden; isolation: isolate; min-height: 100svh; }
+.heroImage {
+  position: absolute;
+  inset: 0;
+  z-index: -5;
+  background-position: center;
+  background-size: cover;
+  filter: saturate(0.9) contrast(1.05);
+  transform: scale(1.04);
+}
+.heroShade {
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  background:
+    linear-gradient(90deg, rgb(19 11 30 / 0.94) 0%, rgb(19 11 30 / 0.7) 42%, rgb(19 11 30 / 0.35) 100%),
+    linear-gradient(0deg, var(--color-ink) 0%, transparent 42%, rgb(19 11 30 / 0.45) 100%);
+}
 .heroGrid {
   position: absolute; inset: 0; z-index: -4;
   background-image: linear-gradient(rgb(244 239 230 / 0.06) 1px, transparent 1px), linear-gradient(90deg, rgb(244 239 230 / 0.06) 1px, transparent 1px);

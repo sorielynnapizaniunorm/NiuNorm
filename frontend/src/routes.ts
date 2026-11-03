@@ -4,6 +4,7 @@ import Home from "./pages/Home/Home";
 import ApplyPage from "./Apply/Apply";
 import Results from "./pages/Results/results";
 import About from "./pages/About/About";
+import Niunies from "./pages/Niunies";
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
       { path: "apply", Component: ApplyPage },
       { path: "results", Component: Results },
       { path: "about", Component: About },
+      { path: "niunies", Component: Niunies },
     ],
   },
 ]);

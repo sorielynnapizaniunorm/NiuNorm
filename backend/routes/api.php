@@ -12,4 +12,5 @@ Route::get('/health', function (Request $request) {
     ]);
 });
 
-Route::post('/applications', [ApplicationController::class, 'store']);
+Route::post('/applications', [ApplicationController::class, 'store'])
+    ->middleware('throttle:10,1');

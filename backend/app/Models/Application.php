@@ -7,19 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 class Application extends Model
 {
     protected $fillable = [
-        'brand_name',
         'contact_name',
-        'email',
-        'tiktok_handle',
-        'monthly_gmv',
+        'contact_role',
+        'brand_name',
+        'shop_link',
         'category',
+        'stage',
+        'monthly_gmv',
+        'marketing_budget',
         'services',
-        'referral',
-        'message',
+        'goal',
+        'email',
+        'mobile',
+        'start_when',
+        'source',
+        'referred_by',
+        'source_detail',
+        'suggested_package',
+        'match_score',
         'status',
     ];
 
     protected $casts = [
         'services' => 'array',
+        'match_score' => 'integer',
     ];
 }

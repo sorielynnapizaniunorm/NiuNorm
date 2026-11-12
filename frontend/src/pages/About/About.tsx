@@ -287,10 +287,10 @@ const FOUNDERS: Member[] = [
   { name: "Isabellatrex Velasco", role: "Founder of NiuNorm", dept: "Leadership", src: isabellatrexPhoto, c: "#F5B94F", pos: "50% 22%" },
 ];
 const TEAM: Member[] = [
-  { name: "Joanna Sophia Nombre", role: "Senior Ads and Marketing", dept: "Ads & Marketing", src: joannaPhoto, c: "#F04B9A", pos: "50% 18%" },
-  { name: "Cyllene Panganiban", role: "Senior TikTok & Affiliate Manager", dept: "TikTok & Affiliate", src: cyllenePhoto, c: "#35D6C4", pos: "50% 18%" },
-  { name: "Aliyann Velasco", role: "Junior Ads and Marketing", dept: "Ads & Marketing", src: aliyannPhoto, c: "#FF66B2", pos: "50% 18%" },
-  { name: "Mhea Ann Pauline Arsino", role: "Junior TikTok & Affiliate Manager", dept: "TikTok & Affiliate", src: mheaPhoto, c: "#35D6C4", pos: "50% 18%" },
+  { name: "Phia Nombre", role: "Senior Marketing & TikTok Ads Manager", dept: "Ads & Marketing", src: joannaPhoto, c: "#F04B9A", pos: "50% 18%" },
+  { name: "Zyllene Panganiban", role: "Manager, Client Relations & Affiliate Partnerships", dept: "TikTok & Affiliate", src: cyllenePhoto, c: "#35D6C4", pos: "50% 18%" },
+  { name: "Aliyann Cariño", role: "Paid Media & TikTok Analytics Manager", dept: "Ads & Marketing", src: aliyannPhoto, c: "#FF66B2", pos: "50% 18%" },
+  { name: "Mhea Arsiño", role: "Senior TikTok Shop & Creator Partnerships Manager", dept: "TikTok & Affiliate", src: mheaPhoto, c: "#35D6C4", pos: "50% 18%" },
 ];
 
 /* ---------- Shared bits ---------- */

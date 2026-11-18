@@ -270,6 +270,19 @@ export default function Calculator() {
 
   const gaugePct = curB ? Math.max(0, Math.min(100, curB.margin * 1.6 + 20)) : 0;
 
+  // Mobile: show a sticky price bar while the main result card is off screen.
+  const resultRef = useRef<HTMLDivElement>(null);
+  const [resultVisible, setResultVisible] = useState(true);
+  useEffect(() => {
+    const el = resultRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setResultVisible(e.isIntersecting), { threshold: 0.15 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const showBar = !!(r?.suggested && sugB) && !resultVisible;
+  const scrollToResult = () => resultRef.current?.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "center" });
+
   return (
     <div className={styles.page}>
       {/* Hero */}
@@ -284,7 +297,7 @@ export default function Calculator() {
             </i>
           ))}
         </div>
-        <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-32 sm:px-6 md:px-10 md:pt-40">
+        <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-28 sm:px-6 sm:pb-12 md:px-10 md:pt-40">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className={`${styles.eyebrow} ${styles.rise}`}>
               <span className={styles.liveDot} /> Free tool
@@ -311,9 +324,9 @@ export default function Calculator() {
 
       {/* Calculator */}
       <section className={styles.calc}>
-        <div className="mx-auto grid max-w-7xl gap-5 px-5 pb-20 sm:px-6 md:px-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+        <div className="mx-auto grid max-w-7xl gap-4 px-4 pb-20 sm:gap-5 sm:px-6 md:px-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           {/* Inputs */}
-          <div className={`${styles.card} ${styles.inputs} ${styles.rise}`} style={{ animationDelay: "0.6s" }} {...spot}>
+          <div className={`${styles.card} ${styles.inputs} ${styles.rise} min-w-0`} style={{ animationDelay: "0.6s" }} {...spot}>
             <span className={styles.cardSpot} aria-hidden />
             <p className={styles.cardLabel}>
               <span>01</span> Your product
@@ -394,8 +407,8 @@ export default function Calculator() {
           </div>
 
           {/* Results */}
-          <div className={styles.results}>
-            <div className={`${styles.card} ${styles.hero2} ${styles.rise}`} style={{ animationDelay: "0.7s" }} {...spot}>
+          <div className={`${styles.results} min-w-0`}>
+            <div ref={resultRef} className={`${styles.card} ${styles.hero2} ${styles.rise}`} style={{ animationDelay: "0.7s" }} {...spot}>
               <span className={styles.cardEdge} aria-hidden />
               <span className={styles.heroGlow} aria-hidden />
               <div className="flex items-start justify-between gap-3">
@@ -473,10 +486,12 @@ export default function Calculator() {
 
               <div className={styles.tabs} role="tablist" aria-label="Breakdown">
                 <button type="button" role="tab" aria-selected={view === "suggested"} className={view === "suggested" ? styles.tabOn : ""} onClick={() => setView("suggested")}>
-                  Breakdown: suggested price
+                  <span className={styles.tabPre}>Breakdown: </span>
+                  <span className={styles.tabCap}>suggested price</span>
                 </button>
                 <button type="button" role="tab" aria-selected={view === "current"} className={view === "current" ? styles.tabOn : ""} onClick={() => setView("current")} disabled={!curB}>
-                  Breakdown: current price
+                  <span className={styles.tabPre}>Breakdown: </span>
+                  <span className={styles.tabCap}>current price</span>
                 </button>
               </div>
               {view_b ? <BreakdownView key={view} b={view_b} /> : <p className={styles.empty}>{view === "current" ? "Enter your current price above to see its breakdown." : "Enter your expenses to see where every peso goes."}</p>}
@@ -490,6 +505,18 @@ export default function Calculator() {
           </div>
         </div>
       </section>
+
+      {/* Mobile sticky result */}
+      <div className={`${styles.stickyBar} ${showBar ? styles.stickyOn : ""}`} aria-hidden={!showBar} inert={!showBar}>
+        <button type="button" onClick={scrollToResult} className={styles.stickyInner}>
+          <span className={styles.stickyLabel}>Suggested price</span>
+          <strong className={styles.stickyPrice}>{r?.suggested ? <Tween value={r.suggested} /> : "₱—"}</strong>
+          <span className={styles.stickyProfit}>{sugB ? `+${peso(sugB.profit)} profit` : ""}</span>
+          <span className={styles.stickyGo} aria-hidden>
+            ↑
+          </span>
+        </button>
+      </div>
 
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-5 pb-24 sm:px-6 md:px-10 md:pb-32">

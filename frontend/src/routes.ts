@@ -5,6 +5,7 @@ import ApplyPage from "./Apply/Apply";
 import Results from "./pages/Results/results";
 import About from "./pages/About/About";
 import Niunies from "./pages/Niunies";
+import Calculator from "./pages/calculator/calculator";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
       { path: "results", Component: Results },
       { path: "about", Component: About },
       { path: "niunies", Component: Niunies },
+      { path: "calculator", Component: Calculator },
     ],
   },
 ]);
